@@ -1,13 +1,20 @@
 import React from "react";
+import {useState, useEffect} from 'react';
 import peliculasJSON from './../../assets/peliculas.json';
 import seriesJSON from './../../assets/series.json';
 import CardInfo from "../CardInfo/cardinfo";
+import { getPopularMovies } from "../../API/api";
 import './home.css';
 
 const Home = () => {
+    let [peliculasAPI, setPeliculasAPI] = useState([]);
+    useEffect(()=> {
+      getPopularMovies().then(res => (setPeliculasAPI(peliculasAPI = res.slice(0,5))));
+    }, []);
+    console.log(peliculasAPI);
     const peliculas = peliculasJSON.slice(0, 5);
     const series = seriesJSON.slice(0, 5);
-    const listPeliculas = peliculas.map((pelicula) =>{
+    const listPeliculas = peliculasAPI.map((pelicula) =>{
         return <CardInfo key={pelicula.id} pelicula={pelicula}/>
     });
 
